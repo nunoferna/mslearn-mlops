@@ -12,4 +12,4 @@ inputs:
 environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
 compute: azureml:cpu-cluster
 experiment_name: diabetes-dev-experiment
-description: Train a classification model on diabetes data with registered dataset as input 
+description: Train a classification model on diabetes data with registered dataset as input

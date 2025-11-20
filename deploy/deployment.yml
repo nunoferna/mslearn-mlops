@@ -2,6 +2,5 @@ $schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.sch
 name: blue
 endpoint_name: diabetes-endpoint
 model: azureml:mslearn-model:1
-environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
 instance_type: Standard_DS2_v2
 instance_count: 1
