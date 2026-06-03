@@ -1,6 +1,9 @@
 name: REGISTRY_NAME_PLACEHOLDER
 tags:
   description: Shared registry for approved machine learning assets across workspaces
+  Owner: nuno.oliveira.fernandes@devoteam.com
+  Env: dev
+  Project: mslearn-mlops
 location: PRIMARY_REGION_PLACEHOLDER
 replication_locations:
   - location: PRIMARY_REGION_PLACEHOLDER
