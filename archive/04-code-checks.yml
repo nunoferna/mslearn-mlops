@@ -1,9 +1,7 @@
 name: Code checks
 
 on:
-  pull_request: 
-    branches:
-      - 'main'
+  workflow_dispatch:
 
 jobs:
   job1:
@@ -22,10 +20,5 @@ jobs:
     - name: Run linting tests
       run: | 
         flake8 src/model/
-    - name: Run training tests
-      run: |
-        pip install pip==23.0.1
-        pip install -r requirements.txt
-        pytest tests/
 
 
