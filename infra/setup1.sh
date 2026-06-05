@@ -40,8 +40,13 @@ echo "Suffix: $suffix"
 # Set the necessary variables
 RESOURCE_GROUP="rg-ai300-l${suffix}"
 RESOURCE_PROVIDER="Microsoft.MachineLearningServices"
-REGIONS=("eastus" "westus" "centralus" "northeurope" "westeurope")
-RANDOM_REGION=${AZURE_REGION:-westeurope}
+REGIONS=("italynorth" "swedencentral" "polandcentral" "germanywestcentral" "spaincentral")
+DEFAULT_REGION="spaincentral"
+RANDOM_REGION=${AZURE_REGION:-$DEFAULT_REGION}
+if [[ ! " ${REGIONS[*]} " =~ " ${RANDOM_REGION} " ]]; then
+  echo "Region '$RANDOM_REGION' is not allowed. Allowed regions: ${REGIONS[*]}" >&2
+  exit 1
+fi
 WORKSPACE_NAME="mlw-ai300-l${suffix}"
 COMPUTE_INSTANCE="ci${suffix}"
 COMPUTE_CLUSTER="aml-cluster"

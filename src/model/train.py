@@ -8,13 +8,15 @@ import pandas as pd
 import mlflow
 
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 
 
 # define functions
 def main(args):
-    # enable autologging
-    mlflow.autolog()
+    # Azure ML currently supports MLflow 2.16 and earlier for model logging.
+    # Explicit metric logging avoids newer LoggedModels API calls from MLflow 3.x.
+    mlflow.autolog(log_models=False)
 
     # read data
     df = get_csvs_df(args.training_data)
@@ -23,7 +25,10 @@ def main(args):
     X_train, X_test, y_train, y_test = split_data(df)
 
     # train model
-    train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+    model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+
+    # evaluate model
+    evaluate_model(model, X_test, y_test)
 
 
 def get_csvs_df(path):
@@ -44,7 +49,20 @@ def split_data(df):
 
 def train_model(reg_rate, X_train, X_test, y_train, y_test):
     # train model
-    LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)
+    mlflow.log_param("Regularization rate", reg_rate)
+    return LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)
+
+
+def evaluate_model(model, X_test, y_test):
+    y_hat = model.predict(X_test)
+    acc = (y_hat == y_test).mean()
+    print("Accuracy:", acc)
+    mlflow.log_metric("Accuracy", acc)
+
+    y_scores = model.predict_proba(X_test)
+    auc = roc_auc_score(y_test, y_scores[:, 1])
+    print("AUC:", auc)
+    mlflow.log_metric("AUC", auc)
 
 
 def parse_args():
