@@ -6,6 +6,7 @@ import os
 
 import pandas as pd
 import mlflow
+import mlflow.sklearn
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
@@ -29,6 +30,9 @@ def main(args):
 
     # evaluate model
     evaluate_model(model, X_test, y_test)
+
+    # save model
+    save_model(model, args.model_output)
 
 
 def get_csvs_df(path):
@@ -65,6 +69,12 @@ def evaluate_model(model, X_test, y_test):
     mlflow.log_metric("AUC", auc)
 
 
+def save_model(model, model_output):
+    print(f"Saving model to {model_output}")
+    os.makedirs(model_output, exist_ok=True)
+    mlflow.sklearn.save_model(model, model_output)
+
+
 def parse_args():
     # setup arg parser
     parser = argparse.ArgumentParser()
@@ -74,6 +84,8 @@ def parse_args():
                         type=str)
     parser.add_argument("--reg_rate", dest='reg_rate',
                         type=float, default=0.01)
+    parser.add_argument("--model_output", dest='model_output',
+                        type=str)
 
     # parse args
     args = parser.parse_args()
