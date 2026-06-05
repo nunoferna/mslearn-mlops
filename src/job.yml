@@ -4,12 +4,15 @@ command: >-
   python train.py
   --training_data ${{inputs.training_data}}
   --reg_rate ${{inputs.reg_rate}}
+  --model_output ${{outputs.model_output}}
 inputs:
   training_data: 
     type: uri_folder 
     path: azureml:diabetes-dev-folder:1
   reg_rate: 0.01
+outputs:
+  model_output:
+    type: mlflow_model
 environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
-compute: azureml:cpu-cluster
 experiment_name: diabetes-dev-experiment
 description: Train a classification model on diabetes data with registered dataset as input
